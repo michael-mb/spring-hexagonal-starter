@@ -1,0 +1,25 @@
+plugins {
+    id 'java-library'
+    id "java-test-fixtures"
+}
+
+apply from: '../dependencies.gradle'
+
+dependencies {
+    testFixturesCompileOnly 'org.projectlombok:lombok'
+    testFixturesAnnotationProcessor 'org.projectlombok:lombok'
+    testFixturesImplementation "io.vavr:vavr:${ver.vavrVersion}"
+    testFixturesImplementation 'com.fasterxml.jackson.core:jackson-databind'
+    testFixturesImplementation 'org.springframework.boot:spring-boot-starter-actuator-test'
+    testFixturesImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
+    testFixturesImplementation 'org.springframework.boot:spring-boot-starter-liquibase-test'
+    testFixturesImplementation 'org.springframework.boot:spring-boot-starter-security-oauth2-resource-server-test'
+    testFixturesImplementation 'org.springframework.boot:spring-boot-starter-validation-test'
+    testFixturesImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+    testFixturesImplementation 'org.springframework.boot:spring-boot-testcontainers'
+    testFixturesImplementation 'org.testcontainers:testcontainers-junit-jupiter'
+    testFixturesImplementation 'org.testcontainers:testcontainers-postgresql'
+    testFixturesRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testFixturesImplementation 'com.nimbusds:nimbus-jose-jwt'
+    testFixturesImplementation "org.wiremock:wiremock-standalone:${ver.wiremockVersion}"
+}

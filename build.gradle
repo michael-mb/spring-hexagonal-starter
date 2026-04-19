@@ -1,0 +1,86 @@
+plugins {
+    id "io.spring.dependency-management" version "1.1.7"
+    id "org.openapi.generator" version "7.19.0"
+}
+
+apply from: './dependencies.gradle'
+
+version = '0.0.1'
+
+subprojects {
+
+    group = 'com.cozisoft.starter'
+
+    apply plugin: "java"
+    apply plugin: "java-library"
+    apply plugin: "org.openapi.generator"
+    apply plugin: "io.spring.dependency-management"
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(25)
+        }
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom("org.springframework.boot:spring-boot-dependencies:${ver.springDepManagementVersion}")
+        }
+    }
+
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
+        implementation 'org.springframework.boot:spring-boot-starter-liquibase'
+        implementation 'org.springframework.boot:spring-boot-starter-security-oauth2-resource-server'
+        implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.1'
+
+        implementation "com.auth0:auth0:${ver.auth0Version}"
+        implementation "com.auth0:java-jwt:${ver.auth0JwtVersion}"
+
+        implementation "io.hypersistence:hypersistence-utils-hibernate-71:${ver.hibernateUtilsVersion}"
+        runtimeOnly 'org.postgresql:postgresql'
+
+        implementation "com.googlecode.libphonenumber:libphonenumber:${ver.libphonenumberVersion}"
+        compileOnly 'org.projectlombok:lombok'
+        implementation "io.vavr:vavr:${ver.vavrVersion}"
+        annotationProcessor 'org.projectlombok:lombok'
+        implementation "org.mapstruct:mapstruct:${ver.mapstructVersion}"
+        annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+        annotationProcessor "org.mapstruct:mapstruct-processor:${ver.mapstructProcessorVersion}"
+        annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${ver.lombokMapstructBindingVersion}"
+
+        implementation 'io.swagger.core.v3:swagger-annotations:2.2.6'
+        implementation 'org.openapitools:jackson-databind-nullable:0.2.4'
+
+        testCompileOnly 'org.projectlombok:lombok'
+        testAnnotationProcessor 'org.projectlombok:lombok'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testImplementation 'org.springframework.boot:spring-boot-starter-actuator-test'
+        testImplementation 'org.springframework.boot:spring-boot-starter-liquibase-test'
+        testImplementation 'org.springframework.boot:spring-boot-starter-validation-test'
+        testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+        testImplementation 'org.testcontainers:testcontainers-junit-jupiter'
+        testImplementation 'org.testcontainers:testcontainers-postgresql'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+        testImplementation "org.mapstruct:mapstruct:${ver.mapstructVersion}"
+        testAnnotationProcessor "org.mapstruct:mapstruct-processor:${ver.mapstructProcessorVersion}"
+        testAnnotationProcessor "org.projectlombok:lombok-mapstruct-binding:${ver.lombokMapstructBindingVersion}"
+    }
+
+    sourceSets {
+        main {
+            java {
+                srcDirs 'build/generated/openapi'
+            }
+        }
+    }
+}

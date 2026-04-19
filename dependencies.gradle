@@ -1,0 +1,13 @@
+ext.ver = [
+        'auth0Version'                     : '3.2.0',
+        'auth0JwtVersion'                  : '4.5.0',
+        'hibernateUtilsVersion'            : "3.15.2",
+        'libphonenumberVersion'            : '9.0.15',
+        'springDepManagementVersion'       : "4.0.2",
+        'sendgridVersion'                  : '4.10.3',
+        'vavrVersion'                      : '1.0.0',
+        'mapstructVersion'                 : '1.6.3',
+        'mapstructProcessorVersion'        : '1.6.3',
+        'lombokMapstructBindingVersion'    : '0.2.0',
+        'wiremockVersion'                  : "3.2.0",
+]

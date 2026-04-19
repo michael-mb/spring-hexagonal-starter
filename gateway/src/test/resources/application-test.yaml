@@ -1,0 +1,39 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${test.jwks.uri}
+          issuer-uri: ${test.issuer}
+          audiences:
+            - test-app
+  docker:
+    compose:
+      enabled: false
+  main:
+    allow-bean-definition-overriding: true
+  jpa:
+    open-in-view: false
+
+system:
+  keycloak:
+    server-url: http://localhost:9999
+    realm: test
+    admin-client-id: admin-cli
+    admin-username: admin
+    admin-password: admin
+
+services:
+  account:
+    enabled: true
+    name: account
+    liquibase:
+      change-log: classpath:db/account/db.changelog-master.xml
+      default-schema: account_service
+      liquibase-schema: account_service
+      drop-first: false
+
+logging:
+  level:
+    com.cozisoft.starter: DEBUG
+    org.springframework.security: DEBUG

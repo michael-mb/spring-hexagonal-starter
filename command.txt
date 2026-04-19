@@ -1,0 +1,1 @@
+curl -X POST http://localhost:8080/realms/starter/protocol/openid-connect/token  -d 'grant_type=password&client_id=starter-app&username=admin@starter.io&password=password123'

@@ -1,0 +1,59 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '4.0.2'
+}
+
+apply from: '../dependencies.gradle'
+
+dependencies {
+    implementation project(":shared")
+    implementation project(':services:account')
+
+    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-security-oauth2-resource-server'
+    implementation 'org.springframework.boot:spring-boot-starter-liquibase'
+
+    implementation "com.auth0:auth0:${ver.auth0Version}"
+    implementation "io.hypersistence:hypersistence-utils-hibernate-70:${ver.hibernateUtilsVersion}"
+
+    implementation "io.micrometer:micrometer-registry-prometheus"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "io.micrometer:micrometer-tracing-bridge-brave"
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-security-oauth2-resource-server-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation(testFixtures(project(":shared")))
+}
+
+openApiGenerate {
+    generatorName = "spring"
+
+    inputSpec = "$rootDir/openapi/api-spec.yaml"
+    outputDir = "$buildDir/generated/openapi"
+    invokerPackage = "com.cozisoft.starter"
+    apiPackage = "com.cozisoft.starter.api"
+    modelPackage = "com.cozisoft.starter.dto"
+    modelNameSuffix.set("Dto")
+
+    configOptions = [
+            interfaceOnly          : "true",
+            openApiNullable        : "false",
+            returnResponse         : "true",
+            serializableModel      : "true",
+            useEnumCaseInsensitive : "true",
+            useJakartaEe           : "true",
+            useSpringBoot3         : "true",
+            sourceFolder           : "/"
+    ]
+}
+
+tasks.named('compileJava') {
+    dependsOn tasks.openApiGenerate
+}

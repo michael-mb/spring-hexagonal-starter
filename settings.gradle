@@ -1,0 +1,15 @@
+include("shared")
+include("gateway")
+
+def servicesDirName = "services"
+
+def servicesDirectory = rootDir.listFiles().findAll { (it.name == servicesDirName) }.first()
+
+if (servicesDirectory.exists() && servicesDirectory.isDirectory()) {
+    def subdirectories = servicesDirectory.listFiles().findAll {
+        it.isDirectory() && !it.isHidden()
+    }
+    subdirectories.forEach {
+        service -> include("${servicesDirName}:${service.name}")
+    }
+}

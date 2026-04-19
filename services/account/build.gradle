@@ -1,0 +1,6 @@
+apply from: '../../dependencies.gradle'
+
+dependencies {
+    implementation project(":shared")
+    testImplementation(testFixtures(project(":shared")))
+}

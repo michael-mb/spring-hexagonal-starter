@@ -1,0 +1,248 @@
+openapi: 3.0.3
+info:
+  title: Spring Starter API
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8081/api
+    description: Local development server
+
+tags:
+  - name: Accounts
+
+paths:
+  /accounts:
+    post:
+      tags: [Accounts]
+      operationId: createAccount
+      responses:
+        "201":
+          $ref: "#/components/responses/AccountResponse"
+        "400":
+          $ref: "#/components/responses/GlobalErrorResponse"
+        "409":
+          $ref: "#/components/responses/GlobalErrorResponse"
+
+  /accounts/whoami:
+    get:
+      tags: [Accounts]
+      operationId: whoami
+      responses:
+        "200":
+          $ref: "#/components/responses/AccountResponse"
+        "401":
+          $ref: "#/components/responses/GlobalErrorResponse"
+
+  /accounts/{accountId}:
+    get:
+      tags: [Accounts]
+      operationId: getAccountById
+      parameters:
+        - in: path
+          name: accountId
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          $ref: "#/components/responses/AccountResponse"
+        "404":
+          $ref: "#/components/responses/GlobalErrorResponse"
+
+    patch:
+      tags: [Accounts]
+      operationId: patchAccountById
+      parameters:
+        - in: path
+          name: accountId
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatchAccountRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/AccountResponse"
+        "400":
+          $ref: "#/components/responses/GlobalErrorResponse"
+
+    delete:
+      tags: [Accounts]
+      operationId: deleteAccountById
+      parameters:
+        - in: path
+          name: accountId
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: Account deleted successfully
+        "401":
+          $ref: "#/components/responses/GlobalErrorResponse"
+        "403":
+          $ref: "#/components/responses/GlobalErrorResponse"
+
+  /accounts/{accountId}/status:
+    put:
+      tags: [Accounts]
+      operationId: updateAccountStatusById
+      parameters:
+        - in: path
+          name: accountId
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateAccountStatusRequest"
+      responses:
+        "204":
+          description: Account status updated successfully
+        "400":
+          $ref: "#/components/responses/GlobalErrorResponse"
+        "404":
+          $ref: "#/components/responses/GlobalErrorResponse"
+
+components:
+  responses:
+    AccountResponse:
+      description: Successful account operation
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Account"
+
+    GlobalErrorResponse:
+      description: Error response
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/GlobalErrorResponseDetail"
+
+  schemas:
+    Account:
+      title: Account
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        status:
+          $ref: "#/components/schemas/AccountStatus"
+        gender:
+          $ref: "#/components/schemas/AccountGender"
+        phoneNumber:
+          $ref: "#/components/schemas/PhoneNumber"
+        address:
+          $ref: "#/components/schemas/Address"
+        creationState:
+          $ref: "#/components/schemas/AccountCreationState"
+
+    AccountStatus:
+      title: AccountStatus
+      type: string
+      enum: [ACTIVE, SUSPENDED, DELETED]
+
+    AccountCreationState:
+      title: AccountCreationState
+      type: string
+      enum: [COMPLETE, INCOMPLETE]
+
+    AccountGender:
+      type: string
+      enum: [MALE, FEMALE]
+
+    PhoneNumber:
+      title: PhoneNumber
+      type: object
+      properties:
+        countryCode:
+          type: string
+        nationalNumber:
+          type: string
+
+    Address:
+      title: Address
+      type: object
+      properties:
+        street:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        countryCode:
+          type: string
+        zipCode:
+          type: string
+
+    PatchAccountRequest:
+      title: PatchAccountRequest
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        gender:
+          $ref: "#/components/schemas/AccountGender"
+        phoneNumber:
+          $ref: "#/components/schemas/PhoneNumber"
+        address:
+          $ref: "#/components/schemas/Address"
+
+    UpdateAccountStatusRequest:
+      title: UpdateAccountStatusRequest
+      type: object
+      required:
+        - action
+      properties:
+        action:
+          $ref: "#/components/schemas/AccountStatusUpdateAction"
+
+    AccountStatusUpdateAction:
+      type: string
+      enum:
+        - activate
+        - suspend
+
+    GlobalErrorResponseDetail:
+      title: GlobalErrorResponseDetail
+      type: object
+      properties:
+        timestamp:
+          type: string
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        errorCode:
+          type: string

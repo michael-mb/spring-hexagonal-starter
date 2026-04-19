@@ -1,0 +1,41 @@
+server:
+  port: 8081
+
+management:
+  server:
+    port: 8091
+    base-path: /api
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  config:
+    import:
+      - optional:file:./.env[.properties]
+  jpa:
+    properties:
+      hibernate:
+        generate_statistics: true
+  docker:
+    compose:
+      lifecycle-management: start_only
+  web:
+    error:
+      include-stacktrace: always
+
+logging:
+  level:
+    org.hibernate.stat: DEBUG
+    com.cozisoft.starter: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.security: TRACE
+
+services:
+  account:
+    enabled: true
+    name: account
+    liquibase:
+      change-log: classpath:db/account/db.changelog-master.xml
+      default-schema: account_service
+      liquibase-schema: account_service
+      drop-first: ${LIQUIBASE_DROP_FIRST:false}

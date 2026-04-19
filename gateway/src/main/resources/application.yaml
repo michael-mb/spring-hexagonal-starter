@@ -1,0 +1,77 @@
+server:
+  port: 8081
+  compression:
+    min-response-size: 2048
+    enabled: true
+  forward-headers-strategy: native
+  servlet:
+    context-path: /api
+
+management:
+  security:
+    enabled: false
+  tracing:
+    sampling:
+      probability: 1.0
+    enabled: false
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  server:
+    port: 8091
+    base-path: /api
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: spring-starter
+  jpa:
+    open-in-view: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI}
+          jwk-set-uri: ${KEYCLOAK_JWK_SET_URI}
+          audiences:
+            - ${KEYCLOAK_AUDIENCE}
+  profiles:
+    active: ${ACTIVE_PROFILE:development}
+  docker:
+    compose:
+      file: file:./local-setup/compose.yaml
+      enabled: true
+      lifecycle-management: start_and_stop
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.liquibase.autoconfigure.LiquibaseAutoConfiguration
+  mvc:
+    problemdetails:
+      enabled: false
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+system:
+  keycloak:
+    server-url: ${KEYCLOAK_SERVER_URL}
+    realm: ${KEYCLOAK_REALM}
+    admin-client-id: ${KEYCLOAK_ADMIN_CLIENT_ID}
+    admin-username: ${KEYCLOAK_ADMIN_USERNAME}
+    admin-password: ${KEYCLOAK_ADMIN_PASSWORD}
