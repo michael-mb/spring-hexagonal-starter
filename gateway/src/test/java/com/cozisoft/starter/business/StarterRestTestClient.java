@@ -1,18 +1,18 @@
 package com.cozisoft.starter.business;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @RequiredArgsConstructor
 public class StarterRestTestClient {
     private final MockMvc mockMvc;
-    private final ObjectMapper objectMapper;
+    private final JsonMapper objectMapper;
 
     public ResultActions createAccount(RequestPostProcessor auth) throws Exception {
         return mockMvc.perform(post("/accounts").with(auth));

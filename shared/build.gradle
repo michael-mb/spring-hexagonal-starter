@@ -9,7 +9,7 @@ dependencies {
     testFixturesCompileOnly 'org.projectlombok:lombok'
     testFixturesAnnotationProcessor 'org.projectlombok:lombok'
     testFixturesImplementation "io.vavr:vavr:${ver.vavrVersion}"
-    testFixturesImplementation 'com.fasterxml.jackson.core:jackson-databind'
+    testFixturesImplementation 'tools.jackson.core:jackson-databind'
     testFixturesImplementation 'org.springframework.boot:spring-boot-starter-actuator-test'
     testFixturesImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
     testFixturesImplementation 'org.springframework.boot:spring-boot-starter-liquibase-test'
